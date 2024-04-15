@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-crud-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: crud-app
+  template:
+    metadata:
+      labels:
+        app: crud-app
+    spec:
+      containers:
+        - name: crud-app
+          image: "{{ .Values.crudApp.image.repository }}:{{ .Values.crudApp.image.tag }}"
+          ports:
+            - containerPort: 8080
+          env:
+            - name: server.port
+              value: "8080"
+            - name: spring.datasource.url
+              value: "jdbc:mysql://{{ .Release.Name }}-mysqldb:3306/{{ .Values.mysqlDatabase }}?useSSL=false&createDatabaseIfNotExist=true"
+            - name: spring.datasource.username
+              value: "{{ .Values.mysqlUser }}"
+            - name: spring.datasource.password
+              value: "{{ .Values.mysqlPassword }}"
+      dependsOn:
+        - mysqldb
+

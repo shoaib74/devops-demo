@@ -1,0 +1,21 @@
+# templates/ingress.yaml
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: {{ .Release.Name }}-crud-app-ingress
+  annotations:
+    kubernetes.io/ingress.class: alb
+    alb.ingress.kubernetes.io/scheme: internet-facing
+    alb.ingress.kubernetes.io/target-type: ip
+spec:
+  rules:
+    - http:
+        paths:
+          - path: /*
+            pathType: ImplementationSpecific 
+            backend:
+              service:
+                name: {{ .Release.Name }}-crud-app
+                port:
+                  number: 8080
+
