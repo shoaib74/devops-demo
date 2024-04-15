@@ -2,7 +2,6 @@ FROM maven:3.5.3-jdk-8-alpine as target
 WORKDIR /build
 
 COPY ./ /build/
-WORKDIR /build/Adda247UserAuthService
 RUN mvn clean install
 
 FROM tomcat:8.5-jre8-temurin
