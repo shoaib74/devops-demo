@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link href="css/bootstrap.css" rel="stylesheet" />
+    <script type="text/javascript" src="js/jquery.js"></script>
+    <script type="text/javascript" src="js/bootstrap.js"></script>
+    <script type="text/javascript" src="js/angular.js"></script>
+    <script type="text/javascript" src="js/ui-bootstrap.js"></script>
+    <script type="text/javascript" src="js/notify.js"></script>
+    <script type="text/javascript" src="js/moment.js"></script>
+    <script type="text/javascript" src="js/app.js"></script>
+</head>
+<body ng-app="app" ng-controller="myController">
+    <div class="row" ng-init="list()">
+        <div class="col-xs-12 col-md-12">
+            <div class="panel panel-default">
+                <div class="panel-heading bordered-bottom bordered-blue">
+                    <h4><b>Manage User </b></h4>
+                </div>
+                <div class="panel-body">
+                    <div class="panel panel-default" ng-show="createShow">
+                        <div class="panel-heading bordered-bottom bordered-blue">
+                            <h4><b>{{head}} User </b></h4>
+                        </div>
+                        <div class="panel-body no-padding">
+                            <div class="panel panel-body">
+                                <form name="usersCreateForm" id="usersCreateForm" class="form-horizontal" role="form" novalidate>
+                                    <div class="form-group">
+                                        <label class="col-sm-2 control-label no-padding-right"><b> First Name : </b></label>
+                                        <div class="col-sm-3" ng-class="{ 'has-error' : usersCreateForm.firstName.$touched && usersCreateForm.firstName.$invalid }">
+                                            <input type="text" class="form-control" name="firstName" ng-model="details.firstName"  required>
+                                            <div class="help-block" ng-if=" usersCreateForm.firstName.$touched && usersCreateForm.firstName.$invalid">
+                                                <p ng-show="usersCreateForm.firstName.$error.required">First Name is required</p>
+                                            </div>
+                                        </div>
+                                        <label class="col-sm-2 control-label no-padding-right"><b> Last Name : </b></label>
+                                        <div class="col-sm-3" ng-class="{ 'has-error' : usersCreateForm.lastName.$touched && usersCreateForm.lastName.$invalid }">
+                                            <input type="text" class="form-control" name="lastName" ng-model="details.lastName"  required>
+                                            <div class="help-block" ng-if=" usersCreateForm.lastName.$touched && usersCreateForm.lastName.$invalid">
+                                                <p ng-show="usersCreateForm.lastName.$error.required">Last Name is required</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-sm-2 control-label no-padding-right"><b> User Name : </b></label>
+                                        <div class="col-sm-3" ng-class="{ 'has-error' : usersCreateForm.username.$touched && usersCreateForm.username.$invalid }">
+                                            <input type="text" class="form-control" name="username" ng-model="details.username" required>
+                                            <div class="help-block" ng-if=" usersCreateForm.username.$touched && usersCreateForm.username.$invalid">
+                                                <p ng-show="usersCreateForm.username.$error.required">User Name is required</p>
+                                            </div>
+                                        </div>
+                                        <label class="col-sm-2 control-label no-padding-right"><b> DOB : </b></label>
+                                        <div class="col-sm-3" ng-class="{ 'has-error' : usersCreateForm.dob.$touched && usersCreateForm.dob.$invalid }">
+                                            <input type="date" class="form-control" name="dob" ng-model="details.dob" max="{{curDate}}" required>
+                                            <div class="help-block" ng-if=" usersCreateForm.dob.$touched && usersCreateForm.dob.$invalid">
+                                                <p ng-show="usersCreateForm.dob.$error.max">Can't Greater Than today</p>
+                                                <p ng-show="usersCreateForm.dob.$error.required">Dob Date is required</p>
+                                            </div>
+                                        </div>
+                                        <br><br><br>
+                                        <div class="pull-right">
+                                            <button class="btn btn-blue" data-ng-click="save()" data-ng-disabled="usersCreateForm.$invalid">{{head=='Create'?'Save':'Update'}}</button>
+                                            <button class="btn btn-warning" data-ng-click="createShow = false">Cancel</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    <div data-ng-hide="createShow">
+                        <div class="pull-left" data-ng-show="userList.length">
+                            <span class="input-icon">
+                                <input class="form-control" type="text" placeholder="Search by First Name" size="25" ng-model="searchText.firstName"/>
+                            </span>
+                        </div>
+                        <div class="pull-right">
+                            <button class="btn btn-primary" data-ng-click="create()"><span class="fa fa-edit"></span>Create</button>
+                        </div>
+                        <div data-ng-show="userList.length"><!--class="table-scrollable"-->
+                            <table class="table table-bordered table-condensed">
+                                <thead>
+                                <tr>
+                                    <th>S.No.</th>
+                                    <th>First Name</th>
+                                    <th>Last Name</th>
+                                    <th>Username</th>
+                                    <th>DOB</th>
+                                    <th></th>
+                                    <th></th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr data-ng-repeat="user in userList |filter:searchText" ng-class="{active : !user.active}">
+                                    <td width="1">{{$index+1}}</td>
+                                    <td>{{user.firstName}}</td>
+                                    <td>{{user.lastName}}</td>
+                                    <td>{{user.username}}</td>
+                                    <td>{{user.dob}}</td>
+                                    <td width="1"><i class="glyphicon glyphicon-edit" tooltip-placement="top" tooltip="Edit" data-ng-click=edit(user)></i></td>
+                                    <td width="1"><i class="glyphicon glyphicon-trash" tooltip-placement="top" tooltip="Delete" data-ng-click=deleteUser(user)></i></td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
