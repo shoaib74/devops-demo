@@ -1,4 +1,4 @@
-version: "3"
+version: "3.8"
 services:
   mysqldb:
     container_name: mysqldb
@@ -24,9 +24,11 @@ services:
     ports:
       - "8080:8080"
     environment:
-      MYSQL_HOST: mysqldb
-      MYSQL_USER: root
-      MYSQL_PASSWORD: phonders#1234
-      MYSQL_PORT: 3306    # we are in same network so we connect internally.
+      server.port: 8080
+      spring.datasource.url: jdbc:mysql://mysqldb:3306/userdb?useSSL=false&createDatabaseIfNotExist=true
+      spring.datasource.username: root
+      spring.datasource.password: phonders#1234
     depends_on:
     -  mysqldb   
+volumes:
+  db_data: 

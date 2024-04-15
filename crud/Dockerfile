@@ -1,4 +1,4 @@
-FROM maven:3.5.3-jdk-8-alpine as target
+FROM maven:3.5.3-jdk-8-slim as target
 WORKDIR /build
 COPY ./ /build/
 RUN mvn clean install -Dmaven.test.skip=true
