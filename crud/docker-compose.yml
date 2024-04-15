@@ -1,0 +1,32 @@
+version: "3"
+services:
+  mysqldb:
+    container_name: mysqldb
+    image: mysql:8.0
+    ports:
+      - "3306:3306" 
+    command: --default-authentication-plugin=mysql_native_password        
+    volumes:
+      - db_data:/var/lib/mysql
+    restart: always
+    environment:
+     MYSQL_ROOT_PASSWORD: phonders#1234
+     MYSQL_DATABASE: userdb
+     MYSQL_USER: admin
+     MYSQL_PASSWORD: phonders#1234        
+
+
+  crud-app:
+    container_name: crud-app
+    image: crud-app
+    restart: on-failure
+    build: .
+    ports:
+      - "8080:8080"
+    environment:
+      MYSQL_HOST: mysqldb
+      MYSQL_USER: root
+      MYSQL_PASSWORD: phonders#1234
+      MYSQL_PORT: 3306    # we are in same network so we connect internally.
+    depends_on:
+    -  mysqldb   
