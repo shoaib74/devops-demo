@@ -1,0 +1,26 @@
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  annotations:
+  name: apm-apm-server
+  namespace: elk
+spec:
+  maxReplicas: 8
+  metrics:
+  - resource:
+      name: memory
+      target:
+        averageUtilization: 65
+        type: Utilization
+    type: Resource
+  - resource:
+      name: cpu
+      target:
+        averageUtilization: 65
+        type: Utilization
+    type: Resource
+  minReplicas: 1
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: apm-apm-server

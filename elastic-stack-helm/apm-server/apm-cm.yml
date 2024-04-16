@@ -1,0 +1,29 @@
+apiVersion: v1
+data:
+  apm-server.yml: "apm-server:\n  host: \"0.0.0.0:8200\"\n  max_header_size: 5548576\n
+    \ idle_timeout: 180s\n  read_timeout: 120s\n  write_timeout: 120s\n  max_event_size:
+    9457600\n  max_connections: 0\n  #      response_headers:\n  #        X-My-Header:
+    \nqueue:\n  mem:\n    events: 1900000\nxpack.monitoring.enabled: true\noutput.elasticsearch:\n
+    \ hosts: [\"https://elasticsearch-master.elk:9200\"]\n  ## If you have security
+    enabled- you'll need to add the credentials\n  ## as environment variables\n  username:
+    \"${ELASTICSEARCH_USERNAME}\"\n  password: \"${ELASTICSEARCH_PASSWORD}\"\n  ##
+    If SSL is enabled\n  protocol: https\n  ssl.verification_mode: none\n  #      ssl.certificate_authorities:\n
+    \ #  - /usr/share/apm-server/config/certs/ca.pem\n  # ssl.certificate: \"/usr/share/apm-server/config/certs/security-master.pem\"\n
+    \ #ssl.key: \"/usr/share/apm-server/config/certs/security-master-key.pem\"  \n
+    \ worker: 90\n  max_retries: 10\n  bulk_max_size: 90000\n  timeout: 180\n"
+kind: ConfigMap
+metadata:
+  annotations:
+    meta.helm.sh/release-name: apm-server
+    meta.helm.sh/release-namespace: default
+  creationTimestamp: "2023-03-29T17:30:53Z"
+  labels:
+    app: apm-server-apm-server
+    app.kubernetes.io/managed-by: Helm
+    chart: apm-server-7.17.3
+    heritage: Helm
+    release: apm-server
+  name: apm-server-apm-server-config
+  namespace: default
+  resourceVersion: "179728655"
+  uid: ccac6641-b300-4340-acc2-d864326d5093

@@ -1,0 +1,32 @@
+apiVersion: eksctl.io/v1alpha5
+kind: ClusterConfig
+
+metadata:
+  name: eks-demo-1
+  region: ap-south-1
+vpc:
+  subnets:
+    private:
+      ap-south-1a: { id: subnet-056831f2bee50c7da }
+      ap-south-1b: { id: subnet-05e2beb5b16c706e9 }
+managedNodeGroups:
+  - name: worker1-logging
+    minSize: 1
+    maxSize: 3
+    desiredCapacity: 1
+    volumeSize: 30
+    volumeType: gp3
+    ssh:
+      allow: true
+      publicKeyName: demo
+    labels: { role: workers-logging }
+    tags:
+      nodegroup-role: worker
+      Env: monitor
+    iam:
+      withAddonPolicies:
+        externalDNS: true
+        certManager: true    
+    instanceTypes: ["t4g.large"]
+    privateNetworking: true
+
