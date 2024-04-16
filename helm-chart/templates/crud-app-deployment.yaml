@@ -21,7 +21,7 @@ spec:
             - name: server.port
               value: "8080"
             - name: spring.datasource.url
-              value: "jdbc:mysql://{{ .Release.Name }}-mysqldb:3306/{{ .Values.mysqlDatabase }}?useSSL=false&createDatabaseIfNotExist=true"
+              value: "jdbc:mysql://{{ .Release.Name }}-mysqldb:3306/{{ .Values.mysqlDatabase }}?allowPublicKeyRetrieval=true&useSSL=false&createDatabaseIfNotExist=true"
             - name: spring.datasource.username
               value: "{{ .Values.mysqlUser }}"
             - name: spring.datasource.password
