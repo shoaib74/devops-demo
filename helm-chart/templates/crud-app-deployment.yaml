@@ -17,15 +17,48 @@ spec:
           image: "{{ .Values.crudApp.image.repository }}:{{ .Values.crudApp.image.tag }}"
           ports:
             - containerPort: 8080
+          livenessProbe:
+            failureThreshold: 30
+            httpGet:
+              path: /
+              port: 8080
+              scheme: HTTP
+            initialDelaySeconds: 10
+            periodSeconds: 5
+            successThreshold: 1
+            timeoutSeconds: 30     
+          readinessProbe:
+            failureThreshold: 30
+            httpGet:
+              path: /
+              port: 8080
+              scheme: HTTP
+            initialDelaySeconds: 10
+            periodSeconds: 5
+            successThreshold: 1
+            timeoutSeconds: 30             
+          resources:
+            limits:
+              cpu: 1
+              memory: 3Gi
+            requests:
+              cpu: 300m
+              memory: 1000Mi              
           env:
+            - name: ELASTIC_APM_ENVIRONMENT
+              value: demo
+            - name: ELASTIC_APM_SERVER_URLS
+              value: http://apm-server-apm-server:8200
+            - name: ELASTIC_APM_SERVICE_NAME
+              value: crud-app
+            - name: JAVA_OPTS
+              value: -javaagent:/opt/apm-agent.jar     
             - name: server.port
               value: "8080"
             - name: spring.datasource.url
-              value: "jdbc:mysql://{{ .Release.Name }}-mysqldb:3306/{{ .Values.mysqlDatabase }}?allowPublicKeyRetrieval=true&useSSL=false&createDatabaseIfNotExist=true"
+              value: "jdbc:mysql://crud-app-mysqldb:3306/userdb?allowPublicKeyRetrieval=true&useSSL=false&createDatabaseIfNotExist=true"
             - name: spring.datasource.username
-              value: "{{ .Values.mysqlUser }}"
+              value: "root"
             - name: spring.datasource.password
-              value: "{{ .Values.mysqlPassword }}"
-      dependsOn:
-        - mysqldb
+              value: "phonders#1234"
 
