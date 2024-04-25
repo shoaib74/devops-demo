@@ -61,4 +61,7 @@ spec:
               value: "root"
             - name: spring.datasource.password
               value: "phonders#1234"
+            - name: spring.jpa.hibernate.ddl-auto  
+              value: update
+  
 
